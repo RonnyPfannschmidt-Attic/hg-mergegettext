@@ -1,4 +1,6 @@
 import argparse
+import sys
+
 from mercurial import simplemerge
 Merge3Text = simplemerge.Merge3Text
 
@@ -19,13 +21,19 @@ class Merge3Gettext(Merge3Text):
             else:
                 yield t
 
-def simple(base, local, other):
+def internal(base, local, other):
     merge = Merge3Gettext(base, local, other)
     lines = merge.merge_lines(
         name_a='local',
         name_b='other',
         reprocess=True,
     )
+    lines = list(lines)
+    return lines, merge.conflicts
+
+
+def simple(base, local, other):
+    lines, conflicts = internal(base, local, other)
     return ''.join(lines)
 
 def readfile(name):
@@ -37,11 +45,12 @@ def files(base, local, other):
     local_data = readfile(local)
     other_data = readfile(other)
 
-    result = simple(base_data, local_data, other_data)
+    result, conflicts = internal(base_data, local_data, other_data)
 
     with open(local, 'w') as fp:
-        fp.write(result)
+        fp.writelines(result)
 
+    return conflicts
 
 
 parser = argparse.ArgumentParser()
@@ -52,7 +61,8 @@ parser.add_argument('other')
 def main(args=None):
     opts = parser.parse_args(args)
     print opts
-    files(opts.base, opts.local, opts.other)
+    res = files(opts.base, opts.local, opts.other)
+    sys.exit(int(res))
 
 if __name__ == '__main__':
     main()
