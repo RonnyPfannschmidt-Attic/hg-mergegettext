@@ -19,9 +19,9 @@ def test_files(tmpdir, monkeypatch):
     tmpdir.join('base').write(BASE)
     tmpdir.join('local').write(LOCAL)
     tmpdir.join('other').write(OTHER)
-
+    
     monkeypatch.chdir(tmpdir)
-    files('base', 'local', 'other')
-    result = tmpdir.join('local').read()
+    files('base', 'local', 'other', 'store')
+    result = tmpdir.join('store').read()
     assert result == OTHER
 

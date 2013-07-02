@@ -40,14 +40,14 @@ def readfile(name):
     with open(name) as fp:
         return fp.read()
 
-def files(base, local, other):
+def files(base, local, other, store):
     base_data = readfile(base)
     local_data = readfile(local)
     other_data = readfile(other)
 
     result, conflicts = internal(base_data, local_data, other_data)
 
-    with open(local, 'w') as fp:
+    with open(store, 'w') as fp:
         fp.writelines(result)
 
     return conflicts
@@ -57,11 +57,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument('base')
 parser.add_argument('local')
 parser.add_argument('other')
+parser.add_argument('--store', dest='store')
 
 def main(args=None):
     opts = parser.parse_args(args)
     print opts
-    res = files(opts.base, opts.local, opts.other)
+    res = files(opts.base, opts.local, opts.other, opts.store)
     sys.exit(int(res))
 
 if __name__ == '__main__':
