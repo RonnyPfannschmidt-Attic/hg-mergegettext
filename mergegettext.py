@@ -17,7 +17,7 @@ class Merge3Gettext(Merge3Text):
             b = self.b[t[5]:t[6]]
             full = base + a + b
             if all(x.startswith('#: ') for x in full):
-                yield 'b', t[5], t[6]
+                yield 'a', t[3], t[4]
             else:
                 yield t
 

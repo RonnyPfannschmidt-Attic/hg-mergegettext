@@ -12,7 +12,7 @@ OTHER = BASE.replace('a:2', 'a:4')
 
 
 def test_simple():
-    assert simple(BASE, LOCAL, OTHER) == OTHER
+    assert simple(BASE, LOCAL, OTHER) == LOCAL
 
 
 def test_files(tmpdir, monkeypatch):
@@ -23,5 +23,5 @@ def test_files(tmpdir, monkeypatch):
     monkeypatch.chdir(tmpdir)
     files('base', 'local', 'other', 'store')
     result = tmpdir.join('store').read()
-    assert result == OTHER
+    assert result == LOCAL
 
