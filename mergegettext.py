@@ -1,3 +1,4 @@
+import argparse
 from mercurial import simplemerge
 Merge3Text = simplemerge.Merge3Text
 
@@ -27,4 +28,31 @@ def simple(base, local, other):
     )
     return ''.join(lines)
 
+def readfile(name):
+    with open(name) as fp:
+        return fp.read()
 
+def files(base, local, other):
+    base_data = readfile(base)
+    local_data = readfile(local)
+    other_data = readfile(other)
+
+    result = simple(base_data, local_data, other_data)
+
+    with open(local, 'w') as fp:
+        fp.write(result)
+
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument('base')
+parser.add_argument('local')
+parser.add_argument('other')
+
+def main(args=None):
+    opts = parser.parse_args(args)
+    print opts
+    files(opts.base, opts.local, opts.other)
+
+if __name__ == '__main__':
+    main()
