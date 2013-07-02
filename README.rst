@@ -11,3 +11,15 @@ return the local change for line number comment changes.
 
 It's not yet smart about bigger changes.
 
+
+
+
+
+
+Git usage
+---------
+
+::
+  [mergetool "gettext"]
+      name = gettext
+      cmd = python $HG_MERGE_GETTEXT_CHECKOUT/mergegettext.py "$BASE" "$LOCAL" "$REMOTE" --store "$MERGED"
